@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<robot name="teresa">
+
+	<material name="white">
+		<color rgba="1 1 1 1"/>
+	</material>
+
+	<material name="black">
+		<color rgba="0.2 0.2 0.2 1"/>
+	</material>
+
+	<material name="gray">
+		<color rgba="0.8 0.8 0.8 0.8"/>
+	</material>
+
+	<material name="blue">
+		<color rgba="0 0 1 0.8"/>
+	</material>
+
+
+	<link name="servo_yaw">
+		<visual>
+			<geometry>
+				<!-- width (x), depth (y), height (z) -->
+				<box size="0.04 0.04 0.02"/>
+			</geometry>
+			<origin rpy="1.57079633 0 1.57079633" xyz="0.0 0.0 0.05"/>
+			<material name="white"/>
+		</visual>
+		<collision>
+			<geometry>
+				<box size="0.04 0.04 0.02"/>
+			</geometry>
+			<origin rpy="0 0 0" xyz="0.0 0.0 0.05"/>
+			<contact_coefficients mu="1" />
+		</collision>
+		<inertial>
+			<mass value="0.7517"/>
+			<inertia ixx="0.00138633838541667" ixy="0.0" ixz="0.0" iyy="0.00403725541666667" iyz="0.0" izz="0.00314030505208333"/>
+			<origin rpy="0 0 0" xyz="0 0.0 0.1"/>
+		</inertial>
+	</link>
+
+	<link name="servo_pitch">
+		<visual>
+		<geometry>
+				<!-- width (x), depth (y), height (z) -->
+				<box size="0.04 0.04 0.02"/>
+			</geometry>
+			<origin rpy="1.57079633 0 0" xyz="0.0 0.0 -0.01"/>
+			<material name="black"/>
+		</visual>
+		<collision>
+			<geometry>
+				<box size="0.04 0.04 0.02"/>
+			</geometry>
+			<origin rpy="1.57079633 0 0" xyz="0.0 0.0 -0.01"/>
+			<contact_coefficients mu="1" />
+		</collision>
+		<inertial>
+			<mass value="0.7517"/>
+			<inertia ixx="0.00138633838541667" ixy="0.0" ixz="0.0" iyy="0.00403725541666667" iyz="0.0" izz="0.00314030505208333"/>
+			<origin rpy="0 0 0" xyz="0 0.0 -0.01"/>
+		</inertial>
+	</link>
+
+	<link name="camera_mount">
+		<visual>
+			<geometry>
+				<box size="0.05 0.025 0.025"/>
+			</geometry>
+			<origin rpy="0 0 0" xyz="0 0 -0.005"/>
+			<material name="gray"/>
+		</visual>
+		<collision>
+			<geometry>
+				<box size="0.05 0.025 0.025"/>
+			</geometry>
+			<origin rpy="0 0 0" xyz="0 0 -0.005"/>
+			<contact_coefficients mu="1" />
+		</collision>
+		<inertial>
+			<mass value="0.001"/>
+			<inertia ixx="0.00138633838541667" ixy="0.0" ixz="0.0" iyy="0.00403725541666667" iyz="0.0" izz="0.00314030505208333"/>
+			<origin rpy="0 0 0" xyz="0 0.0 -0.005"/>
+		</inertial>
+	</link>
+
+	<!-- Camera -->
+	<link name="camera_view">
+		<visual>
+			<geometry>
+				<box size="0.0001 0.0001 0.0001"/>
+			</geometry>
+			<origin rpy="0 0 0" xyz="0 0 0"/>
+			<material name="blue"/>
+		</visual>
+	</link>
+
+
+	<!-- joints -->
+	<joint name="yaw_joint" type="revolute">
+		<parent link="servo_yaw"/>
+		<child link="servo_pitch"/>
+		<axis xyz="0 1 0"/>
+		<limit effort="1000.0" lower="-1.57079633" upper="1.57079633" velocity="0.0"/>
+		<origin rpy="0 0 0" xyz="0.0 0.03 0.04"/>
+	</joint>
+	<!-- Connect cam mount to servo pitch -->
+	<joint name="pitch_joint" type="revolute">
+		<parent link="servo_pitch"/>
+		<child link="camera_mount"/>
+		<axis xyz="1 0 0"/>
+		<limit effort="1000.0" lower="-1.57079633" upper="1.57079633" velocity="0.0"/>
+		<origin rpy="0 0 0" xyz="0.0 0.0 -0.02"/>
+	</joint>
+
+	<joint name="camera_joint" type="fixed">
+		<parent link="camera_mount"/>
+		<child link="camera_view"/>
+		<axis xyz="0 0 0"/>
+		<origin rpy="0 0 0" xyz="0.0 0.0 -0.018"/>
+	</joint>
+</robot>
