@@ -40,6 +40,7 @@ class SimulatedIMU(IMU):
         self.roll = 0.0
         self.pitch = 0.0
         self.yaw = 0.0
+        self.start = time.time()
 
     def update(self):
         self.index = self.index + (1 * self.direction)
@@ -58,7 +59,8 @@ class SimulatedIMU(IMU):
             print(self.data[self.index])
             print(e)
             exit(1)
-        time.sleep(0.01)
+        while time.time() - self.start < timestamp:
+            time.sleep(0.0001)
 
     def get_roll(self):
         return self.roll
